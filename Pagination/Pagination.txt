@@ -1,0 +1,71 @@
+//Author: Arun Sahu
+//Desription: Generic Pagination with any object.
+public with sharing class Pagination {
+    public PaginationEntity pg {get;set;}
+    public Pagination (integer RecordsPerPage){
+        pg = new PaginationEntity(RecordsPerPage);
+        pg.currentpage = 1; 
+        pg.objs= new List<SObject>();        
+    }
+    
+    // set Pagination.
+    public PaginationEntity setPagination(string baseQuery)
+    {
+        pg.BaseQuery = baseQuery;
+        string qry = baseQuery +' Limit '+pg.RecordsPerPage; 
+        pg.objs = Database.query(qry);  
+        List<SObject> objRecords = Database.query(baseQuery);
+        pg.TotalRecords = objRecords.size();
+        if(System.Math.mod(pg.TotalRecords , pg.RecordsPerPage) > 0)
+        {
+            pg.Pager = (pg.TotalRecords / pg.RecordsPerPage) + 1;
+        }
+        else
+        {
+            pg.Pager = (pg.TotalRecords / pg.RecordsPerPage) ;            
+        } 
+        return pg;
+    }
+    
+    // Next Event.
+    public PaginationEntity Next(PaginationEntity pg)
+    {
+        pg.Next = pg.currentpage * pg.RecordsPerPage;  
+        pg.currentpage = pg.currentpage + 1;        
+        string qry = pg.BaseQuery +' Limit '+pg.RecordsPerPage+ ' offset '+pg.Next; 
+        pg.objs = Database.query(qry);      
+        return pg;
+    }
+    
+    // Previuos event.
+    public PaginationEntity Previuos(PaginationEntity pg)
+    {
+        pg.currentpage = pg.currentpage - 1;
+        pg.Previous = (pg.currentpage  -1)* pg.RecordsPerPage;     
+        string qry = pg.BaseQuery +' Limit '+pg.RecordsPerPage+ ' offset '+pg.Previous;
+        pg.objs = Database.query(qry);    
+        return pg; 
+    }
+    
+    // Previuos event.
+    public PaginationEntity FirstRecord(PaginationEntity pg)
+    {
+        pg.currentpage = 1;
+        pg.Previous = 0;    
+        pg.Next = 0;
+        string qry = pg.BaseQuery +' Limit '+pg.RecordsPerPage;
+        pg.objs = Database.query(qry);    
+        return pg; 
+    }
+    
+    // Previuos event.
+    public PaginationEntity LastRecord(PaginationEntity pg)
+    {
+        pg.currentpage = pg.Pager;
+        pg.Previous = (pg.currentpage  -1)* pg.RecordsPerPage;   
+        string qry = pg.BaseQuery +' Limit '+pg.RecordsPerPage+ ' offset '+pg.Previous;
+        pg.objs = Database.query(qry);    
+        return pg; 
+    }
+    
+}

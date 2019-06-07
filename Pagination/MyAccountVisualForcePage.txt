@@ -1,0 +1,48 @@
+<apex:page controller="MyAccountController" tabStyle="Account" lightningStylesheets="true"> 
+    <apex:form >         
+        <apex:pageMessages id="error" ></apex:pageMessages>
+        <apex:pageBlock id="account_Id">               
+            <apex:pageBlockSection title="Enter Account Details" columns="2" collapsible="false"> 
+                <apex:inputField label="Name"  value="{!account.Name}" required="true"/> 
+                <apex:inputField label="Email" value="{!account.Email__c}" required="true" />
+                <apex:inputField label="Phone" value="{!account.Phone}" required="true"/> 
+                <apex:inputField label="Type"  value="{!account.Type}" required="true" />                
+            </apex:pageBlockSection>    
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Save" action="{!SaveAccount}" reRender="accountTbl_id,account_Id,error" />   
+            </apex:pageBlockButtons>
+        </apex:pageBlock> 
+        
+        <apex:outputPanel id="accountTbl_id">
+            <apex:pageBlock rendered="{!accounts.size > 0}" >            
+                <apex:pageBlockTable styleClass="slds-table" value="{!accounts}" var="acct"> 
+                    <apex:column > 
+                        <apex:facet name="header">Name</apex:facet> 
+                        <apex:outputText value="{!acct.Name}" />   
+                    </apex:column>  
+                    <apex:column >                	
+                        <apex:facet name="header">Email</apex:facet>                              
+                        <apex:outputText value="{!acct.Email__c}"/>    
+                    </apex:column> 
+                    <apex:column >                	
+                        <apex:facet name="header">Phone</apex:facet>
+                        <apex:outputText value="{!acct.Phone}" />                
+                    </apex:column> 
+                    <apex:column >                	
+                        <apex:facet name="header">Type</apex:facet>
+                        <apex:outputText value="{!acct.Type}" />                
+                    </apex:column>     
+                    <apex:facet name="footer">Showing Page # {!pagin.pg.currentpage} of {!pagin.pg.Pager}</apex:facet>
+                </apex:pageBlockTable>   
+                <apex:pageblockButtons location="Bottom"> 
+                    <apex:actionRegion >
+                        <apex:commandButton value="First" action="{!first}" disabled="{!pagin.pg.currentpage == 1}" reRender="accountTbl_id" />  
+                        <apex:commandButton value="Next" action="{!nextPage}"  disabled="{!pagin.pg.currentpage == pagin.pg.Pager }"    reRender="accountTbl_id"/>
+                        <apex:commandButton value="Previous" action="{!previous}" disabled="{!pagin.pg.currentpage == 1}" reRender="accountTbl_id" />  
+                        <apex:commandButton value="Last" action="{!last}"  disabled="{!pagin.pg.currentpage == pagin.pg.Pager }"    reRender="accountTbl_id"/>
+                    </apex:actionRegion>
+                </apex:pageblockButtons> 
+            </apex:pageBlock> 
+        </apex:outputPanel>
+    </apex:form>
+</apex:page>
