@@ -1,0 +1,84 @@
+// Author	   : Arun Sahu
+// Description : Custom Account Details
+public with sharing class MyAccountController {
+    
+    // Data Members.
+    public Account account {get;set;}
+    public List<Id> ids;
+    public List<Account> accounts {get;set;}  
+    public Pagination pagin {get;set;}
+    
+    // Constructor: Initailze data members.
+    public MyAccountController ()
+    {      
+        account = new Account();
+        ids = new List<Id>();
+        accounts = new List<Account>();  
+        pagin = new Pagination(2);
+    }
+    
+    // Save account details and set account details table.
+    public void saveAccount()
+    {
+        try
+        {
+            Insert account; 
+            ids.add(account.id); 
+            
+            // Reset Account.
+            account = new Account();
+            displayAccounts();  
+        }
+        catch(Exception e)
+        {
+            ApexPages.Message msg = new ApexPages.Message(Apexpages.Severity.ERROR, e.getdmlMessage(0) );
+            ApexPages.addMessage(msg);
+        } 
+    }
+    
+    // Display account details which were addedd.
+    public void displayAccounts()
+    {
+        try
+        {  
+            string qry = 'select Name,Email__c,Phone,Type from Account WHERE id in '+inClausify();  
+            pagin.pg = pagin.setPagination(qry); 
+            accounts = pagin.pg.objs;
+        }
+        catch(Exception e)
+        {
+            ApexPages.Message msg = new ApexPages.Message(Apexpages.Severity.ERROR, e.getdmlMessage(0) );
+            ApexPages.addMessage(msg);
+        } 
+    }
+    
+    public void nextPage()
+    { 
+        pagin.pg = pagin.Next(pagin.pg);
+        accounts = pagin.pg.objs;
+    }
+    
+    public void previous()
+    { 
+        pagin.pg = pagin.Previuos(pagin.pg);
+        accounts = pagin.pg.objs;
+    }
+    public void First()
+    { 
+        pagin.pg = pagin.FirstRecord(pagin.pg);
+        accounts = pagin.pg.objs;
+    }
+    
+    public void Last()
+    { 
+        pagin.pg = pagin.LastRecord(pagin.pg);
+        accounts = pagin.pg.objs;
+    }
+    
+    public String inClausify() {
+        String inClause = String.format( '(\'\'{0}\'\')', 
+                                        new List<String> { String.join( new List<Id>(ids) , '\',\'') });
+        return inClause;
+    }
+    
+}

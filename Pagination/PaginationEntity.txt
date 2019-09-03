@@ -1,0 +1,15 @@
+public  class PaginationEntity {
+    public integer currentpage{get; set;}
+    public integer Previous{get; set;}
+    public string BaseQuery{get; set;}  
+    public integer Next{get; set;}  
+    public integer Pager{get; set;}   
+    public integer TotalRecords{get; set;}   
+    public List<SObject> objs {get; set;}
+    public integer RecordsPerPage{get; set;}   
+    
+    public PaginationEntity(integer RecordsPerPage)
+    {
+        this.RecordsPerPage = RecordsPerPage;
+    }
+}
