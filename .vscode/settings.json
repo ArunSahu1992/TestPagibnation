@@ -1,6 +1,6 @@
 {
     "eslint.nodePath": "c:\\Users\\arun_sahu\\.vscode\\extensions\\salesforce.salesforcedx-vscode-lwc-47.17.1\\node_modules",
-    "git.enabled": true,
+    "git.enabled": true,  11
 
     // Path to the git executable
     "git.path": "C:\\path\\to\\git.exe" 
