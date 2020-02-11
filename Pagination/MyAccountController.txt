@@ -4,7 +4,7 @@ public with sharing class MyAccountController {
     
     // Data Members.
     public Account account {get;set;}
-    public List<Id> ids;
+    public List<Id> ids;sdfsdfsdfsdf
     public List<Account> accounts {get;set;}  
     public Pagination pagin {get;set;}
     
