@@ -3,5 +3,5 @@
     "git.enabled": true,
 
     // Path to the git executable
-    "git.path": "C:\\path\\to\\git.exe"
+    "git.path": "C:\\path\\to\\git.exe" 
 }
